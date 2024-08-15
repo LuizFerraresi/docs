@@ -2,13 +2,11 @@
 
 Dependencies to work on linux environment
 
-
 ## Install from Ubuntu Store
 - PyCharm Community Edition
 - Visual Studio Code
 - Discord
 - Postman
-
 
 ## Install from Official Website
 - [DBeaver Community Edition](https://dbeaver.io/download/)
