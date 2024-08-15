@@ -1,20 +1,21 @@
 # Amazon Web Services CLI Login
 
-How to configure credentials to work locally with AWS CLI, we will cover short and long term credentials and also SSO Login.
-
+How to configure credentials to work locally with AWS CLI, we will cover short and long
+term credentials and also SSO Login.
 
 ## Requirements
 
 - [AWS CLI](https://docs.aws.amazon.com/pt_br/cli/latest/userguide/getting-started-install.html)
 
-
 ## Disclaimer
 
 - [Official Documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 
-- Always remember AWS CLI hierarchy for credentials when using the profiles, if you exported environment variables they will prevail on ``~/.aws/config`` file.
+- Always remember AWS CLI hierarchy for credentials when using the profiles, if you
+exported environment variables they will prevail on ``~/.aws/config`` file.
 
-- When executing a command, always use ``--region`` and ``--profile`` to select the correct account/role
+- When executing a command, always use ``--region`` and ``--profile`` to select the 
+correct account/role
 
 
 ## Config IAM User Long Term Credentials
@@ -41,15 +42,19 @@ aws configure import --csv file://credentials.csv
 
 The auth and configuration it will be set as ``default`` profile
 
-
 ## Config SSO Login with CLI
 
 ### Short Term Credentials
-You can access Your multi account link, open the avaliable roles for the account and click on cli were will be shown access credentials but not the long term ones, it will have ``SESSION TOKEN``, an it will expire after a period and the access will be blocked, just export the varibales show on screen on your bash.
+
+You can access Your multi account link, open the avaliable roles for the account and
+click on cli were will be shown access credentials but not the long term ones, it will
+have ``SESSION TOKEN``, an it will expire after a period and the access will be
+blocked, just export the varibales show on screen on your bash.
 
 ### SSO
 
-Here you can create one SSO Session and reuse across multiple profiles, so you can let many accounts configured at once in your CLI.
+Here you can create one SSO Session and reuse across multiple profiles, so you can let
+many accounts configured at once in your CLI.
 
 ```bash
 aws configure sso
@@ -64,7 +69,8 @@ SSO region [None]:
 SSO registration scopes [sso:account:access]:
 ```
 
-* If you are having trouble to make SSO works, use ``--debug`` to see all actions and it's logs on the terminal.
+* If you are having trouble to make SSO works, use ``--debug`` to see all actions and
+it's logs on the terminal.
 
 After completing the SSO config, you will be redirected to your brownser to an AWS page.
 
@@ -72,7 +78,8 @@ Select ``Allow`` and then ``Allow Access``.
 
 After accepting this two sections a ``Request Approve`` should be shown in your brownser.
 
-If you are using AWS Organizations, all accounts should be shown in a drop down at your prompt, select the account you desire.
+If you are using AWS Organizations, all accounts should be shown in a drop down at
+your prompt, select the account you desire.
 
 After that a drop down with avaliable roles will be shown, select the role you desire.
 
@@ -86,8 +93,10 @@ CLI profile name [RoleName-AccountId]: <PROFILE ALIAS>
 
 ### Add Accounts to SSO
 
-To add acounts to your SSO, you can reuse your session, to do that, just write you already configured session name on ``SSO session name``, a box on the bottom of your prompt shoulb apper with your already configured session infos, and then you can add another account.
-
+To add acounts to your SSO, you can reuse your session, to do that, just write you
+already configured session name on ``SSO session name``, a box on the bottom of your
+prompt shoulb apper with your already configured session infos, and then you can add
+another account.
 
 ## Config SSO Login with Config File
 
@@ -117,7 +126,7 @@ sso_role_name = readOnly
 region = < AWS REGION>
 output = json
 
-[profile user1]
+[profile user-one]
 sso_session = my-sso
 sso_account_id = <AWS ACCOUNT ID>
 sso_role_name = readOnly
@@ -129,7 +138,6 @@ sso_region = <AWS REGION>
 sso_start_url = https://my-sso-portal.awsapps.com/start
 sso_registration_scopes = sso:account:access
 ```
-
 
 ## Login on AWS SSO
 
