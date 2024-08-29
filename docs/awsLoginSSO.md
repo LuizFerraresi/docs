@@ -17,7 +17,6 @@ exported environment variables they will prevail on ``~/.aws/config`` file.
 - When executing a command, always use ``--region`` and ``--profile`` to select the 
 correct account/role
 
-
 ## Config IAM User Long Term Credentials
 
 The easiest way is throught environment variables export command:
@@ -42,16 +41,21 @@ aws configure import --csv file://credentials.csv
 
 The auth and configuration it will be set as ``default`` profile
 
-## Config SSO Login with CLI
-
-### Short Term Credentials
+## Config IAM User Short Term Credentials
 
 You can access Your multi account link, open the avaliable roles for the account and
 click on cli were will be shown access credentials but not the long term ones, it will
 have ``SESSION TOKEN``, an it will expire after a period and the access will be
 blocked, just export the varibales show on screen on your bash.
 
-### SSO
+```bash
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+export AWS_SESSION_TOKEN=
+export AWS_DEFAULT_REGION=
+```
+
+## SSO
 
 Here you can create one SSO Session and reuse across multiple profiles, so you can let
 many accounts configured at once in your CLI.
@@ -95,10 +99,10 @@ CLI profile name [RoleName-AccountId]: <PROFILE ALIAS>
 
 To add acounts to your SSO, you can reuse your session, to do that, just write you
 already configured session name on ``SSO session name``, a box on the bottom of your
-prompt shoulb apper with your already configured session infos, and then you can add
-another account.
+prompt should apper with your already configured session infos, press TAB to fullfill
+the session infosand then you can add another account.
 
-## Config SSO Login with Config File
+### Config SSO Login with Config File
 
 You can edit the existing file
 
@@ -143,6 +147,20 @@ sso_registration_scopes = sso:account:access
 
 ```bash
 aws sso login --profile < PROFILE NAME >
+```
+
+## Switching Profiles
+
+```bash
+export AWS_PROFILE=
+```
+
+* if you use custom prompt, propably you will need this var for custom appearence.
+
+You can clear the credentials cache by running:
+
+```bash
+rm -r ~/.aws/cli/cache
 ```
 
 ### Add Kubernetes Cluster to Your Local Context
