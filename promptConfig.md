@@ -8,30 +8,28 @@ as package managers with spaceship theme.
 This project config files organization was design thinking to keep the general
 config on ``.zshrc`` and the specific configs on each manager file.
 
-
 ## Dependencies
 
 Prompt:
-- [zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
+[zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
 
-Prompt Configuration Managers: 
-- [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh)
-- [antigen](https://github.com/zsh-users/antigen)
+Configuration Managers: 
+[oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh),
+[antigen](https://github.com/zsh-users/antigen)
 
-Prompt Theme:
-- [spaceship](https://github.com/spaceship-prompt/spaceship-prompt)
+Theme:
+[spaceship](https://github.com/spaceship-prompt/spaceship-prompt)
 
 Package Manager:
-- [Brew](https://brew.sh/)
+[Brew](https://brew.sh/)
 
-Resources: 
-- [pyenv](https://github.com/pyenv/pyenv)
-- [direnv]()
-- [awscli]()
-- [kubectl](https://kubernetes.io/pt-br/docs/tasks/tools/install-kubectl-linux/)
-- [tfenv]()
-- [tgswitch]()
-
+Resources:
+[pyenv](https://github.com/pyenv/pyenv),
+[direnv](https://direnv.net/),
+[awscli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html),
+[kubectl](https://kubernetes.io/pt-br/docs/tasks/tools/install-kubectl-linux/),
+[tfenv](https://github.com/tfutils/tfenv),
+[tgswitch](https://github.com/warrensbox/tgswitch)
 
 ## Install
 
@@ -39,7 +37,11 @@ Resources:
 
 ```bash
 sudo apt install zsh -y
-sudo chsh -s $(which zsh)  # make it default prompt
+```
+
+```bash
+# make it default prompt
+sudo chsh -s $(which zsh)
 ```
 
 ### oh-my-zsh
@@ -85,8 +87,9 @@ curl -sfL https://direnv.net/install.sh | bash
 
 Fetch the binary, ``chmod +x direnv`` and add it to your path
 
-To export the environemnt variables, you can declare them on ``.envrc`` file with ``export`` as you 
-do in your prompt or you can add a reference to an env file with ``dotenv_if_exists .env``
+To export the environemnt variables, you can declare them on ``.envrc`` file with 
+``export`` as you do in your prompt or you can add a reference to an env file with
+``dotenv_if_exists .env``
 
 To enable direnv or export the variables, run ``direnv allow .``
 
@@ -96,10 +99,53 @@ To enable direnv or export the variables, run ``direnv allow .``
 brew install pyenv
 ```
 
+```bash
+# download python version
+pyenv install < PYTHON VERSION >
+
+# set global python version
+pyenv global < PYTHON VERSION >
+
+# set local python version
+pyenv local < PYTHON VERSION >
+```
+
+* This will create a ``.python-version`` file in our directory, so every time we enter
+this project, the terminal will select the python version automatically.
+
+* virtualenv's managed by pyenv will be stored as virtualenvwrapper, so all the venv's
+will be togheter in a folder managed by this extension.
+
+```bash
+# create virtualenv
+virtualenv .venv
+
+# activate virtualenv
+source .venv/bin/activate 
+```
+
+### awscli
+
+```bash
+
+```
+
 ### kubectl
 
 ```bash
 brew install kubectl
+```
+
+### tfenv
+
+```bash
+brew install tfenv
+```
+
+### tgswitch
+
+```bash
+curl -L https://raw.githubusercontent.com/warrensbox/tgswitch/release/install.sh | bash
 ```
 
 ## Config Files
@@ -127,13 +173,28 @@ eval "$(pyenv init -)"
 # Direnv
 eval "$(direnv hook zsh)"
 
-# Aliases
+# Set default user
+DEFAULT_USER=$(whoami)
 
-# Extras
+# Aliases
+alias ohmyzsh="nano ~/zshrc"
+
+# Function Calls
+
+aws-login () {
+  # Set AWS_PROFILE varibale and make sso login on desired account
+
+  aws sso login --profile "$1"
+  export AWS_PROFILE="$1"
+  echo "Aws Account SSO $1"
+}
+
+#### Extras - Not Mapped ####
+
 EOF
 ```
 
-The values added with ``cat > ~/.zshrc <EOF`` will be added after ``# Extras``
+More config values can be appended with ``cat > ~/.zshrc <EOF``
 
 ### .antigenrc
 
@@ -153,6 +214,7 @@ antigen theme spaceship-prompt/spaceship-prompt
 antigen bundle spaceship-prompt/spaceship-vi-mode@main
 
 antigen apply
+
 EOF
 ```
 
@@ -196,7 +258,7 @@ SPACESHIP_PROMPT_ORDER=(
   char           # Prompt character
 )
 
-SPACESHIP_PROMPT_ORDER=(
+SPACESHIP_RPROMPT_ORDER=(
   exit_code      # Exit code section
   exec_time      # Execution time
 )
@@ -208,3 +270,9 @@ You can chenge your spaceship config file path with ``export SPACESHIP_CONFIG``
 
 If your prompt line is with bad format, check your ``SPACESHIP_PROMPT_ORDER`` variable to see if
 there is no miss configuration
+
+## Reload Prompt
+
+```bash
+source ~/.bashrc
+```
