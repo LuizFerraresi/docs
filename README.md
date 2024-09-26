@@ -34,7 +34,7 @@ Workstation Setup Dependencies
 
 - [DBeaver Community Edition](https://dbeaver.io/download/)
 - [Google Chrome](https://www.google.com/chrome/)
-- [Docker Engine](https://docs.docker.com/engine/install/) 
+- [Docker Engine](https://docs.docker.com/engine/install/)
 - [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/)
 - [Docker Desktop](https://docs.docker.com/desktop/install/)
 
@@ -45,6 +45,11 @@ Workstation Setup Dependencies
 - [Json Formatter](https://jsonformatter.curiousconcept.com/#)
 - [HTML Formatter](https://codebeautify.org/htmlviewer)
 - [Password Generator](https://www.lastpass.com/pt/features/password-generator)
+
+## Files
+
+- [json](https://www.json.org/json-en.html)
+- [yaml](https://en.wikipedia.org/wiki/YAML)
 
 ## References
 
