@@ -26,6 +26,10 @@ Workstation Setup Dependencies
 [Yaml](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml),
 [Open In Brownser](https://marketplace.visualstudio.com/items?itemName=techer.open-in-browser)
 
+## Prompt's
+
+- [Terminator](https://gnome-terminator.org/)
+
 ## Install from Official Website
 
 - [DBeaver Community Edition](https://dbeaver.io/download/)
@@ -39,7 +43,19 @@ Workstation Setup Dependencies
 - [Cron Expression](https://crontab.cronhub.io/)
 - [Base 64 Encode/Decode](https://www.base64decode.org/)
 - [Json Formatter](https://jsonformatter.curiousconcept.com/#)
+- [HTML Formatter](https://codebeautify.org/htmlviewer)
+- [Password Generator](https://www.lastpass.com/pt/features/password-generator)
 
 ## References
 
 - [AWS Well-Architected](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)
+
+## SemVer - Semantic Versioning
+
+[Documentation](https://semver.org/)
+
+Release: `MAJOR.MINOR.PATH`
+
+    MAJOR - backward incompatible changes
+    MINOR - new feature backward compatible
+    PATCH - bugfix for current functionalitites
