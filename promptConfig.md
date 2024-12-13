@@ -27,9 +27,20 @@ Resources:
 [pyenv](https://github.com/pyenv/pyenv),
 [direnv](https://direnv.net/),
 [awscli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html),
+[ghcli](https://cli.github.com/),
 [kubectl](https://kubernetes.io/pt-br/docs/tasks/tools/install-kubectl-linux/),
+[kubent](https://github.com/doitintl/kube-no-trouble),
 [tfenv](https://github.com/tfutils/tfenv),
 [tgswitch](https://github.com/warrensbox/tgswitch)
+
+CLI Tools (Install using `apt`):
+[jq](https://jqlang.github.io/jq/),
+[yq](https://github.com/mikefarah/yq),
+[htop](https://htop.dev/)
+
+Tools:
+[solaar](https://pwr-solaar.github.io/Solaar/index)
+[flameshot](https://flameshot.org/)
 
 ## Install
 
@@ -39,8 +50,9 @@ Resources:
 sudo apt install zsh -y
 ```
 
+Make it default prompt:
+
 ```bash
-# make it default prompt
 sudo chsh -s $(which zsh)
 ```
 
@@ -50,30 +62,46 @@ sudo chsh -s $(which zsh)
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-### antigen
+### Antigen
 
 ```bash
-curl -L git.io/antigen > antigen.zsh
+curl -L git.io/antigen > ~/antigen.zsh
 ```
 
 * spaceship will be installed using antigen
 
-### brew
+### Homebrew
+
+```bash
+sudo apt-get install build-essential procps curl file git
+```
 
 ```bash
 sudo apt-get install build-essential procps curl file git
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
+Add Brew to `$PATH`:
+
+```bash
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+```
+
+Validate Install
+
+```bash
+brew --version
+```
+
 > ```bash
 > # install package
-> brew install < PACKAGE >
+> brew install [PACKAGE]
 >
 > # update package
-> brew upgrade < PACKAGE >
+> brew upgrade [PACKAGE]
 >
 > # uninstall package
-> brew uninstall < PACKAGE >
+> brew uninstall [PACKAGE]
 >
 > # update package manager
 > brew update
@@ -82,10 +110,14 @@ sudo apt-get install build-essential procps curl file git
 ### direnv
 
 ```bash
-curl -sfL https://direnv.net/install.sh | bash
+sudo apt-get install direnv
 ```
 
-Fetch the binary, ``chmod +x direnv`` and add it to your path
+Validate Install
+
+```bash
+direnv --version
+```
 
 To export the environemnt variables, you can declare them on ``.envrc`` file with 
 ``export`` as you do in your prompt or you can add a reference to an env file with
@@ -100,14 +132,18 @@ brew install pyenv
 ```
 
 ```bash
+pyenv --version
+```
+
+```bash
 # download python version
-pyenv install < PYTHON VERSION >
+pyenv install [PYTHON VERSION]
 
 # set global python version
-pyenv global < PYTHON VERSION >
+pyenv global [PYTHON VERSION]
 
 # set local python version
-pyenv local < PYTHON VERSION >
+pyenv local [PYTHON VERSION]
 ```
 
 * This will create a ``.python-version`` file in our directory, so every time we enter
@@ -124,10 +160,36 @@ virtualenv .venv
 source .venv/bin/activate 
 ```
 
-### awscli
+### AWS CLI
 
 ```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+```
 
+Validate Install
+
+```bash
+aws --version
+```
+
+### GitHub CLI
+
+```bash
+(type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
+	&& sudo mkdir -p -m 755 /etc/apt/keyrings \
+	&& wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+	&& sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+	&& sudo apt update \
+	&& sudo apt install gh -y
+```
+
+Validate Install
+
+```bash
+gh --version
 ```
 
 ### kubectl
@@ -136,16 +198,54 @@ source .venv/bin/activate
 brew install kubectl
 ```
 
+Validate Install
+
+```bash
+kubectl --version
+```
+
+### kubent
+
+```bash
+brew install kubent
+```
+
+Validate Install
+
+```bash
+
+```
+
 ### tfenv
 
 ```bash
 brew install tfenv
 ```
 
+Validate Install
+
+```bash
+tfenv --version
+```
+
+```bash
+# download terraform version
+tfenv install [TERRAFORM VERSION | latest]
+
+# set terraform version
+tfenv use [TERRAFORM VERSION]
+```
+
 ### tgswitch
 
 ```bash
-curl -L https://raw.githubusercontent.com/warrensbox/tgswitch/release/install.sh | bash
+curl -L https://raw.githubusercontent.com/warrensbox/tgswitch/release/install.sh | sudo bash
+```
+
+Validate Install
+
+```bash
+tgswitch --version
 ```
 
 ## Config Files
@@ -178,6 +278,7 @@ DEFAULT_USER=$(whoami)
 
 # Aliases
 alias ohmyzsh="nano ~/zshrc"
+alias k='kubectl'
 
 # Function Calls
 
@@ -189,7 +290,7 @@ aws-login () {
   echo "Aws Account SSO $1"
 }
 
-#### Extras - Not Mapped ####
+#### Other's - Not Mapped ####
 
 EOF
 ```
@@ -218,6 +319,13 @@ antigen apply
 EOF
 ```
 
+> [!TIP]
+> 'Antigen: Another process in running.' on shell startup
+>
+> ```bash
+> rm ~/.antigen/.lock
+> ```
+
 ### .spaceshiprc
 
 ```bash
@@ -230,7 +338,9 @@ SPACESHIP_TIME_SHOW=true
 SPACESHIP_USER_SHOW=always
 
 # Do not truncate path in repos
-SPACESHIP_DIR_TRUNC_REPO=false
+SPACESHIP_DIR_TRUNC_REPO=true
+
+SPACESHIP_HOST_SHOW="always"
 
 # Display kubectl info
 SPACESHIP_KUBECTL_SHOW=true
@@ -274,5 +384,47 @@ there is no miss configuration
 ## Reload Prompt
 
 ```bash
-source ~/.bashrc
+source ~/.zshrc
+```
+
+## Install Linux Terminator
+
+[Documentation](https://github.com/gnome-terminator/terminator/blob/master/INSTALL.md)
+
+```bash
+sudo add-apt-repository ppa:mattrose/terminator
+sudo apt-get update
+sudo apt install terminator
+```
+
+## Tools
+
+### Solaar
+
+```bash
+sudo apt-get install solaar
+```
+
+Validate Install
+
+```bash
+solaar --version
+```
+
+### Flameshot
+
+```bash
+sudo apt-get install flameshot
+```
+
+Validate Install
+
+```bash
+flameshot --version
+```
+
+Take a snapshot from terminal
+
+```bash
+flameshot gui
 ```
