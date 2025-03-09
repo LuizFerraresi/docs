@@ -127,7 +127,7 @@ To enable direnv or export the variables, run ``direnv allow .``
 ### pyenv
 
 ```bash
-brew install pyenv
+curl -fsSL https://pyenv.run | bash
 ```
 
 ```bash
