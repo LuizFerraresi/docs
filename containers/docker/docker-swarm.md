@@ -5,30 +5,30 @@
 
 ## Design
 
+exposes 2377
+
+Nodes must be able to reach each other on:
+
+TCP/2377 (Swarm management)
+
+TCP/7946 and UDP/7946 (cluster communication)
+
+UDP/4789 (overlay network traffic)
+
 ## Commands
 
 ### Create cluser manager node
 
 ```bash
+# create swarm cluster manager
 docker swarm init --advertise-addr [MANAGER NODE IP]
-```
 
-### Create your resources using a docker-compose.yaml file
+# create your resources using a docker-compose.yaml file
+docker stack deploy -c/--compose-file path/to/docker-compose.yaml [STACK NAME]
 
-```bash
-docker stack deploy -c path/to/docker-compose.yaml [STACK NAME]
-```
-
-### Generate cluster token to add more manager or worker nodes:
-
-```bash
+# generate cluster token to add more manager or worker nodesn `-q` - says to return a string value
 docker swarm join-token -q [worker|manager]
-```
 
-`-q` - says to return a string value
-
-### Join a node to a cluster
-
-```bash
-docker swarm join --token [TOKEN VALUE]
+# join a node to a cluster
+docker swarm join --listen-addr --token [TOKEN VALUE]
 ```
