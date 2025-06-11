@@ -1,4 +1,7 @@
-# [kind (Kubernetes in Docker)](https://kind.sigs.k8s.io/)
+
+# kind (Kubernetes in Docker)
+
+[Website](https://kind.sigs.k8s.io/)
 
 This is a fast way to deploy and test Kubernetes, as with a simple docker run and docker kill
 you can create and destroy a cluster, and you can deploy a multi node cluster
@@ -14,9 +17,9 @@ container it should be proxy
 
 ```bash
 kind create cluster \
-    --name <CLUSTER NAME> \
-    --image kindtest/node:<KUBERNETES VERSION> \
-    --config kind.yaml
+  --name [CLUSTER NAME]\
+  --image kindtest/node:[KUBERNETES VERSION] \
+  --config kind.yaml
 ```
 
 Kind Cluster Definition file

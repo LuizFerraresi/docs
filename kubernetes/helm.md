@@ -45,19 +45,12 @@ helm repo update
 
 ## Charts
 
-### Install from Source
-
-```bash
-helm install <HELM NAME> <REPO NAME>/<HELM NAME> \
-    --namespace <NAMESPACE>
-```
-
-### Install from Local
+### Install
 
 ```bash
 helm install <HELM NAME> <REPO NAME>/<HELM NAME> \
     --namespace <NAMESPACE> \
-    --values values.yaml
+    --values values.yaml  # With custom values
 ```
 
 ### Install Definition Files
@@ -131,3 +124,5 @@ We also have some predefined values thata cannot be overwritten:
 > [!TIP]
 > A good practice is to always add a defalt block config with else, and always add a
 > defalt value to the config and always check the keys when trying to reach some value
+
+[Map Kube API's](https://github.com/helm/helm-mapkubeapis)

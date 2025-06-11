@@ -20,7 +20,8 @@ code --install-extension \
   redhat.vscode-yaml \
   techer.open-in-browser \
   yahyabatulu.vscode-markdown-alert \
-  yzhang.markdown-all-in-one
+  yzhang.markdown-all-in-one \
+  4ops.terraform
 ```
 
 ## VS Code Customizations

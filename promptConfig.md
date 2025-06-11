@@ -44,6 +44,9 @@ Tools:
 
 ## Install
 
+> [!IMPORTANT]
+> Always try to install the packages using `apt`
+
 ### zsh
 
 ```bash
@@ -77,7 +80,6 @@ sudo apt-get install build-essential procps curl file git
 ```
 
 ```bash
-sudo apt-get install build-essential procps curl file git
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
@@ -128,7 +130,7 @@ To enable direnv or export the variables, run ``direnv allow .``
 ### pyenv
 
 ```bash
-brew install pyenv
+curl -fsSL https://pyenv.run | bash
 ```
 
 ```bash
@@ -195,7 +197,11 @@ gh --version
 ### kubectl
 
 ```bash
-brew install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+```
+
+```bash
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ```
 
 Validate Install
@@ -207,20 +213,24 @@ kubectl --version
 ### kubent
 
 ```bash
-brew install kubent
+sh -c "$(curl -sSL https://git.io/install-kubent)"
 ```
 
 Validate Install
 
 ```bash
-
+kubent --version
 ```
 
 ### tfenv
 
 ```bash
-brew install tfenv
+git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv
 ```
+
+Add ~/.tfenv/bin to your $PATH any way you like
+
+echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile
 
 Validate Install
 
@@ -263,7 +273,7 @@ source ~/antigen.zsh
 antigen init ~/.antigenrc
 
 # Brew
-eval "$($(brew --prefix)/bin/brew shellenv)"
+# eval "$($(brew --prefix)/bin/brew shellenv)"
 
 # Pyenv 
 export PYENV_ROOT="$HOME/.pyenv"
@@ -291,6 +301,8 @@ aws-login () {
 }
 
 #### Other's - Not Mapped ####
+
+echo "zshrc config completed"
 
 EOF
 ```

@@ -1,22 +1,23 @@
-# Kubernetes
 
-Kubernetes usefull commands and definitions.
+ # Kubernetes
 
 [Config Best Practices](https://kubernetes.io/docs/concepts/configuration/overview/)
+
+## Kubectl
 
 > [!WARNING]
 > **Always be aware for command and object alias and plurals**
 
 ```bash
-kubectl <ACTION> <RESOURCE>
+kubectl [ACTION] [RESOURCE]
 ```
 
-## Kubectl Extensions with [krew](https://krew.sigs.k8s.io/)
+### Extensions with [krew](https://krew.sigs.k8s.io/)
 
 Krew is the plugin manager for kubectl command-line tool.
 
 ```bash
-kubectl krew install <EXTENSION-NAME>
+kubectl krew install [EXTENSION]
 ```
 
 > [!TIP]
@@ -26,19 +27,28 @@ kubectl krew install <EXTENSION-NAME>
 > [!WARNING]
 > Always check your tool version/release compatibility with your cluster version
 
-## Managing Contexts
+### Export to files
+
+Its possible to export the kubernetes objects to ``json`` or ``yaml`` file, to
+acomplish it use parameter ``-o`` and ``>`` to redirect stdout to a file.
+
+```bash
+kubectl get [OBJECT] -o [yaml | json] > file.ext
+```
+
+## Contexts
 
 Kubernetes does not have the user concept so it uses the ``contexts`` to link
-the cluster and the user trhrought athentication certificates exhanges
+the cluster and the user throught athentication certificates exhanges
 
 All cloud providers have their tools to allow your access to your account clusters
 to accomplish that they will add a contexts in your ``~/kubectl/config`` file,
 the local clusters will aolso have that behavior.
 
 if we whant to manage our contexts our cluster by diferent file to ensure more safety
-whent ruiing commands wou can use param ``--config-file ~/kubectl/<FILE-NAME>.json >``
-to set this parameter as a environment varible 
-``export KUBECONFIG=~/kubectl/<FILE-NAME>.json``
+whent ruiing commands wou can use param ``--config-file ~/kubectl/[FILE-NAME].json >``
+to set this parameter as a environment varible
+``export KUBECONFIG=~/kubectl/[FILE-NAME].json``
 
 > [!TIP]
 > you can keep your local cluster config on the default config file and your cloud
@@ -48,14 +58,14 @@ You can manage the contexts using the following command's or by using and extens
 plugin [kubectx](https://github.com/ahmetb/kubectx?tab=readme-ov-file#kubectl-plugins-macos-and-linux)
 
 ```bash
-# List Contexts
+# list contexts
 kubectl config get-contexts
 
-# Select Context
-kubectl config use-context <CONTEXT NAME>
+# select context
+kubectl config use-context [CONTEXT NAME]
 
-# Rename Context Alias
-kubectl config rename-context <CURRENT CONTEXT NAME> <NEW CONTEXT NAME>
+# rename context alias
+kubectl config rename-context [CURRENT CONTEXT NAME] [NEW CONTEXT NAME]
 ```
 
 > [!TIP]
@@ -65,15 +75,14 @@ kubectl config rename-context <CURRENT CONTEXT NAME> <NEW CONTEXT NAME>
 It's possible to set the namespace to avoid ``-n/--namespace`` argument in every command
 
 ```bash
-kubectl config set-context --current --namespace < NAMESPACE >
+kubectl config set-context --current --namespace [NAMESPACE]
 ```
 
-## Export to files
+to remove the fixed namespace, just set it to `default` again:
 
-Its possible to export the kubernetes objects to ``json`` or ``yaml`` file, to
-acomplish it use parameter ``-o`` and ``>`` to redirect stdout to a file.
-
-kubectl get < OBJECT > -o < EXTENSION TYPE > > file.< EXTENSION TYPE >
+```bash
+kubectl config set-context --current --namespace=default
+```
 
 ## Reconciliation Loop
 
@@ -106,6 +115,10 @@ will be run upon the default namespace. It can be referenced as ``-n/--namespace
 > Resources in different namespaces are only reachble by Service routing, to achive
 > this it's required Full Qualified Domain Name FQDN
 
+## Nodes
+
+## Pods
+
 ## Labels
 
 ## Anotations
@@ -118,14 +131,14 @@ lowest priority, it will be able to use all of the CPU and memory on the cluster
 that can lead to a cluster overhead, that's why it's important to provide ``requests``
 and ``limits`` in the container definition.
 
-    [Best Effort QoS - Quality of Service]() *default
+### [Best Effort QoS - Quality of Service]() *default
 
 ## Selector
 
 Selector is a filtering command to filter labels
 
 ```bash
-kubectl get <RESOURCE> --selector label=<LABEL-KEY>=<DESIRED-VALUE>
+kubectl get [OBJECT] --selector label=[LABEL NAME]=[VALUE]
 ```
 
 
@@ -171,8 +184,16 @@ one pod per node by default, this behavior can be changed by using label selecto
 
 ## Secrets
 
+[modify-secret](https://github.com/rajatjindal/kubectl-modify-secret)
+
 ```bash
-kubectl get secret <SECRET> -o json | jq -r '.data | to_entries[] | "\(.key): \(.value | @base64d)"'
+kubectl krew install modify-secret
+```
+
+    kubectl modify-secret xyz -n kube-system
+
+```bash
+kubectl get secret [SECRET NAME] -n [NAMESPACE] -o json | jq -r '.data | to_entries[] | "\(.key): \(.value | @base64d)"'
 ```
 
 ## Port Foward
@@ -180,10 +201,22 @@ kubectl get secret <SECRET> -o json | jq -r '.data | to_entries[] | "\(.key): \(
 Port foward creates a proxy from your local kubectl to your cluster host
 
 ```bash
-kubectl port-forward service/<SERVICE-NAME> <LOCAL-PORT>:<CONTAINER-PORT> \
-    --namespace <NAMESPACE>
+kubectl port-forward service/[SERVICE NAME] [LOCAL-PORT]:[CONTAINER-PORT] \
+    --namespace [NAMESPACE]
 ```
 SERVICE PORT will be 80 if you are connecting to services
+
+## Exec
+
+```bash
+# single container
+kubectl exec --stdin/-i --tty/-t [POD NAME] --namespace [NAMESPACE] -- [COMMAND]
+
+# pod with multiple containers
+kubectl exec --stdin/-i --tty/-t [POD NAME] --namespace [NAMESPACE] --container/-c [CONTAINER NAME] -- [COMMAND]
+```
+
+to hold the container prompt uses COMMAND as `/bin/bash` or `/bin/sh`
 
 ## Internal DNS
 
@@ -195,8 +228,12 @@ computer, or host, on the internet. The FQDN consists of two parts: the hostname
 and the domain name.
 
 ```bash
-Headless: <SERVICE>.<NAMESPACE>.svc.cluster.local
+Headless: [SERVICE NAMR].[NAMESPACE].svc.cluster.local
 ```
+
+### ndots
+
+https://socketdaddy.com/kubernetes/understanding-ndots-in-dns-configurations/
 
 ## Important Concepts
 
@@ -266,3 +303,11 @@ topologyKey: "kubernetes.io/hostname" | "kubernetes.io/region"
 Allocate resources based on a expression not a fixed selector, you can remove a priority rule by running ``kubectl taint nodes <NODE ID> type <LABEL KEY>:NoSchedule``
 
 Be aware when mixin podAffinity and podAntiaffinity rules, if your cluster does not match the requirements you will get some pending pods.
+
+## Troubleshooting
+
+### Busy Box
+
+```bash
+kubectl run busybox --rm -i -t --image=busybox:1.35 --restart=Never -- sh
+```
