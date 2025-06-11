@@ -628,36 +628,3 @@ docker scout nves
 # compare two images vulnerabilities
 docker scout compare --to [IMAGE NAME]:[IMAGE TAG] [IMAGE NAME]:[IMAGE TAG]
 ```
-
-
-
-  users = {
-    "user@hotmail.com" {
-      first_name = "L"
-      last_name  = "F"
-      groups     = [dependency.admin_group.group_id]
-    }
-  }
-
-##############
-
-network range troubleshooting
-
-```bash
-sudo apt update
-sudo apt install net-tools -y
-```
-
-```bash
-ifconfig
-```
-
-inet 192.168.1.100  netmask 255.255.255.0  broadcast 192.168.1.255
-
-The netmask 255.255.255.0 corresponds to /24
-
-```bash
-route -n
-```
-
-Check the Destination and Genmask columns to find your network range.
