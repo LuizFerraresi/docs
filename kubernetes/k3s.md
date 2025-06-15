@@ -170,10 +170,24 @@ Agent Nodes
 sudo /usr/local/bin/k3s-agent-uninstall.sh
 ```
 
+Kill All
+
+```bash
+sudo /usr/local/bin/k3s-killall.sh
+```
+
 Remose residual data
 
 ```bash
 sudo rm -rf /etc/rancher/k3s /var/lib/rancher/k3s
+```
+
+Clean previous installations
+
+```bash
+rm -rf /var/lib/rancher /etc/rancher; \
+ip addr flush dev lo; \
+ip addr add 127.0.0.1/8 dev lo;
 ```
 
 ## Accessing Cluster
@@ -201,13 +215,14 @@ chmod 600 "$KUBECONFIG"
 ```
 
 > [!CAUTION]
-> The `etc/rancher/k3s/k3s.yaml` path should not hve it's permission changed, it should not be accessed by external sources, to solve this we simply copy the config to the correct path in `/.kube/config`.
+> The `etc/rancher/k3s/k3s.yaml` path should not hve it's permission changed, it should not be accessed by external sources,
+> to solve this we simply copy the config to the correct path in `/.kube/config`.
 
 Now `kubectl` commands should be avaliable
 
 ## Troubleshooting
 
-´´´ bash
+´´´bash
 sudo systemctl status k3s.service
 ```
 
