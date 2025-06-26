@@ -3,23 +3,37 @@
 
 [Website](https://docs.k3s.io/) | [Github](https://github.com/k3s-io/k3s)
 
+default port: 6443
+default coredns ip: 10.43.0.10
+
 ## Installation
 
 ### Simple Installation
 
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.31.2+k3s1" sh -s - \
-  --node-name [NODE NAME]
+  --node-name [NODE NAME] \
+  --docker
 ```
+
+`--dcoker` - enabled docker runtime, defaults contdainerd
 
 It will be created in `default` context.
 
-### Custom Config
+### Cluster Installation
 
-It's possible to configure cluster master deployment with arguments or environment variables on shell command or use  `--config=/path/to/file/cluster-config.yaml` parameter when using shell command.
+HA with embeded etc and kube-vip
 
-## Deployment Strategies
+```
+curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server \
+    --cluster-init \
+    --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
+```
 
+### Custom Config with `yaml` file
+
+It's possible to configure cluster master deployment with arguments or environment variables on shell command 
+or use  `--config=/path/to/file/cluster-config.yaml` parameter when using shell command.
 
 
 ## Disabling Default CNI
@@ -63,7 +77,7 @@ Create using the config file
 curl -sfL https://get.k3s.io | sh -s - --config=$HOME/config.yaml
 ```
 
-## Raw Cluster
+## Raw Cluster Deploy
 
 ### Command Line
 
@@ -72,19 +86,12 @@ curl -sfL https://get.k3s.io | sh -s - \
   --node-name [NODE NAME]
   --flannel-backend none \    # disable fannel backend
   --disable-kube-proxy \      # disable bukeproxy daemont set
-  --disable-network-policy \  # disable kube-routers network fpolicy
+  --disable-network-policy \  # disable kube-routers network policy
   --disable traefik \         # disable traefik ingress
   --disable servicelb \       # disable servicelb as load balancer provider
   --disable coredns \         # disable coredns     
   --disable metrics-server \  # disable metrics server
   --cluster-init
-```
-
-## Container Runtime
-
-```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.31.2+k3s1" sh -s - \
-  --docker # enabled docker runtime, defaults contdainerd
 ```
 
 ## Token Managment
@@ -95,25 +102,15 @@ Create cluster bootstrapping token:
 K3S_TOKEN=$(k3s token create)
 ```
 
-## Cluster IP
-
-Get cluster IP
-
-```bash
-hostname -I
-```
-
-default port: 6443
-
 ## Add Agent Nodes
 
 ```bash
 K3S_TOKEN=<TOKEN>
 API_SERVER_IP=<IP>
-API_SERVER_PORT=<PORT>
+
 curl -sfL https://get.k3s.io | sh -s - agent \
   --token "${K3S_TOKEN}" \
-  --server "https://${API_SERVER_IP}:${API_SERVER_PORT}"
+  --server "https://${API_SERVER_IP}:6443"
 ```
 
 ## Add Control Plane Nodes
@@ -121,10 +118,10 @@ curl -sfL https://get.k3s.io | sh -s - agent \
 ```bash
 K3S_TOKEN=<TOKEN>
 API_SERVER_IP=<IP>
-API_SERVER_PORT=<PORT>
+
 curl -sfL https://get.k3s.io | sh -s - server \
   --token ${K3S_TOKEN} \
-  --server "https://${API_SERVER_IP}:${API_SERVER_PORT}" \
+  --server "https://${API_SERVER_IP}:6443" \
   --flannel-backend=none \
   --disable-kube-proxy \
   --disable-network-policy \
@@ -158,31 +155,21 @@ sudo systemctl restart k3s-agent
 
 ## Uninstall Cluster
 
-Master Node
-
 ```bash
+# uninstall master node
 sudo /usr/local/bin/k3s-uninstall.sh
-```
 
-Agent Nodes
-
-```bash
+# uninstall master node
 sudo /usr/local/bin/k3s-agent-uninstall.sh
-```
 
-Kill All
-
-```bash
+# kill all
 sudo /usr/local/bin/k3s-killall.sh
-```
 
-Remose residual data
-
-```bash
+# remove residual data
 sudo rm -rf /etc/rancher/k3s /var/lib/rancher/k3s
 ```
 
-Clean previous installations
+Cleanup previous installations
 
 ```bash
 rm -rf /var/lib/rancher /etc/rancher; \
@@ -190,21 +177,17 @@ ip addr flush dev lo; \
 ip addr add 127.0.0.1/8 dev lo;
 ```
 
-## Accessing Cluster
+## Cluster Credentials
 
 ```bash
 export KUBECONFIG=~/.kube/config
 ```
 
-### Credentials from K3S
-
 ```bash
-sudo k3s kubectl config view --raw > "$KUBECONFIG"
-```
+# credentials from k3s
+k3s kubectl config view --raw > "$KUBECONFIG"
 
-### Credentials from Rancher
-
-```bash
+# credentials from rancher
 /etc/rancher/k3s/k3s.yaml > "$KUBECONFIG"
 ```
 
@@ -215,7 +198,7 @@ chmod 600 "$KUBECONFIG"
 ```
 
 > [!CAUTION]
-> The `etc/rancher/k3s/k3s.yaml` path should not hve it's permission changed, it should not be accessed by external sources,
+> The `etc/rancher/k3s/k3s.yaml` path should not have it's permission changed, it should not be accessed by external sources,
 > to solve this we simply copy the config to the correct path in `/.kube/config`.
 
 Now `kubectl` commands should be avaliable
