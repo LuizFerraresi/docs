@@ -4,6 +4,7 @@
 [Website](https://docs.k3s.io/) | [Github](https://github.com/k3s-io/k3s)
 
 default port: 6443
+
 default coredns ip: 10.43.0.10
 
 ## Installation
@@ -12,19 +13,22 @@ default coredns ip: 10.43.0.10
 
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.31.2+k3s1" sh -s - \
-  --node-name [NODE NAME] \
   --docker
 ```
 
-`--dcoker` - enabled docker runtime, defaults contdainerd
-
-It will be created in `default` context.
+`--dcoker` - enabled docker runtime, defaults contdainerd.
 
 ### Cluster Installation
 
+`--cluster-init` - start in cluster mode
+
+> [!WARNING]
+> node name must be unique across the cluster, if your instances has the same name,use `--node-name` to provide
+> an unique identification for each node
+
 HA with embeded etc and kube-vip
 
-```
+```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server \
     --cluster-init \
     --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
@@ -35,26 +39,20 @@ curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server \
 It's possible to configure cluster master deployment with arguments or environment variables on shell command 
 or use  `--config=/path/to/file/cluster-config.yaml` parameter when using shell command.
 
+### Raw Cluster Deploy
 
-## Disabling Default CNI
-
-The defaults CNI consists of `CoreDNS`, `Flannel`, `kube-router`, `ServiceLB` (Klipper LoadBalancer) and `Traefik`.
-
-[K3S + Cilium](https://blog.stonegarden.dev/articles/2024/02/bootstrapping-k3s-with-cilium/#tips-tricks-and-troubleshooting)
-
-Whithout cluster CNI (Container Network Interface):
-
-### Command Line
+#### Command Line
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - \
   --node-name [NODE NAME]
-  --flannel-backend none \
-  --disable-kube-proxy \
-  --disable-network-policy \
-  --disable traefik \
-  --disable servicelb \
-  --disable coredns \
+  --flannel-backend none \    # disable fannel backend
+  --disable-kube-proxy \      # disable bukeproxy daemont set
+  --disable-network-policy \  # disable kube-routers network policy
+  --disable traefik \         # disable traefik ingress
+  --disable servicelb \       # disable servicelb as load balancer provider
+  --disable coredns \         # disable coredns     
+  --disable metrics-server \  # disable metrics server
   --cluster-init
 ```
 
@@ -75,23 +73,6 @@ Create using the config file
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - --config=$HOME/config.yaml
-```
-
-## Raw Cluster Deploy
-
-### Command Line
-
-```bash
-curl -sfL https://get.k3s.io | sh -s - \
-  --node-name [NODE NAME]
-  --flannel-backend none \    # disable fannel backend
-  --disable-kube-proxy \      # disable bukeproxy daemont set
-  --disable-network-policy \  # disable kube-routers network policy
-  --disable traefik \         # disable traefik ingress
-  --disable servicelb \       # disable servicelb as load balancer provider
-  --disable coredns \         # disable coredns     
-  --disable metrics-server \  # disable metrics server
-  --cluster-init
 ```
 
 ## Token Managment
@@ -187,7 +168,7 @@ export KUBECONFIG=~/.kube/config
 # credentials from k3s
 k3s kubectl config view --raw > "$KUBECONFIG"
 
-# credentials from rancher
+# credentials from rancher (avoid)
 /etc/rancher/k3s/k3s.yaml > "$KUBECONFIG"
 ```
 
@@ -201,14 +182,48 @@ chmod 600 "$KUBECONFIG"
 > The `etc/rancher/k3s/k3s.yaml` path should not have it's permission changed, it should not be accessed by external sources,
 > to solve this we simply copy the config to the correct path in `/.kube/config`.
 
+It will be created in `default` context.
+
 Now `kubectl` commands should be avaliable
 
 ## Troubleshooting
 
-´´´bash
+```bash
+# service status
 sudo systemctl status k3s.service
+
+# restar service
+sudo systemctl restart k3s
 ```
 
 ```bash
-sudo journalctl -xeu k3s.service
+# service logs
+sudo journalctl -u k3s -n 30 --no-pager
+```
+
+```bash
+# check if API is listening on port 6443
+sudo netstat -tulnp | grep 6443
+```
+
+## K3S + Clilium
+
+The defaults CNI consists of `CoreDNS`, `Flannel`, `kube-router`, `ServiceLB` (Klipper LoadBalancer) and `Traefik`.
+
+[K3S + Cilium](https://blog.stonegarden.dev/articles/2024/02/bootstrapping-k3s-with-cilium/#tips-tricks-and-troubleshooting)
+
+Whithout cluster CNI (Container Network Interface):
+
+### Command Line
+
+```bash
+curl -sfL https://get.k3s.io | sh -s - \
+  --node-name [NODE NAME]
+  --flannel-backend none \
+  --disable-kube-proxy \
+  --disable-network-policy \
+  --disable traefik \
+  --disable servicelb \
+  --disable coredns \
+  --cluster-init
 ```
