@@ -1,5 +1,5 @@
 
-# K3S
+# K3S - Lightweight Kubernetes
 
 [Website](https://docs.k3s.io/) | [Github](https://github.com/k3s-io/k3s)
 
@@ -113,24 +113,20 @@ curl -sfL https://get.k3s.io | sh -s - server \
 ## Remove Node
 
 ```bash
-kubectl drain [NODE NAME] --ignore-daemonsets --delete-local-data
-```
+kubectl cordon [NODE NAME]
 
-```bash
+kubectl drain [NODE NAME] --ignore-daemonsets --delete-local-data
+
 kubectl delete node [NODE NAME]
 ```
 
 ## Restart Cluster
 
-Master Node
-
 ```bash
+# master node
 sudo systemctl restart k3s
-```
 
-Agent Nodes
-
-```bash
+# agent nodes
 sudo systemctl restart k3s-agent
 ```
 
@@ -148,11 +144,8 @@ sudo /usr/local/bin/k3s-killall.sh
 
 # remove residual data
 sudo rm -rf /etc/rancher/k3s /var/lib/rancher/k3s
-```
 
-Cleanup previous installations
-
-```bash
+# cleanup previous installations
 rm -rf /var/lib/rancher /etc/rancher; \
 ip addr flush dev lo; \
 ip addr add 127.0.0.1/8 dev lo;
@@ -169,8 +162,12 @@ export KUBECONFIG=~/.kube/config
 k3s kubectl config view --raw > "$KUBECONFIG"
 
 # credentials from rancher (avoid)
-/etc/rancher/k3s/k3s.yaml > "$KUBECONFIG"
+sudo cat /etc/rancher/k3s/k3s.yaml > "$KUBECONFIG"
 ```
+
+It will be created in `default` context.
+
+Now `kubectl` commands should be avaliable
 
 ### Configure `KUBECONFIG` Permission
 
@@ -181,10 +178,6 @@ chmod 600 "$KUBECONFIG"
 > [!CAUTION]
 > The `etc/rancher/k3s/k3s.yaml` path should not have it's permission changed, it should not be accessed by external sources,
 > to solve this we simply copy the config to the correct path in `/.kube/config`.
-
-It will be created in `default` context.
-
-Now `kubectl` commands should be avaliable
 
 ## Troubleshooting
 
@@ -226,4 +219,8 @@ curl -sfL https://get.k3s.io | sh -s - \
   --disable servicelb \
   --disable coredns \
   --cluster-init
+```
+
+```bash
+
 ```
