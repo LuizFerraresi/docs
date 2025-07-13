@@ -1,9 +1,9 @@
 
-# K3S - Lightweight Kubernetes
+# K3S - Lightweight Kubernetes by Rancher
 
 [Website](https://docs.k3s.io/) | [Github](https://github.com/k3s-io/k3s)
 
-default port: 6443
+default api port: `6443`
 
 default coredns ip: 10.43.0.10
 
@@ -16,7 +16,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.31.2+k3s1" sh -s - \
   --docker
 ```
 
-`--dcoker` - enabled docker runtime, defaults contdainerd.
+`--dcoker` - enabled docker runtime, defaults `contdainerd`.
 
 ### Cluster Installation
 
@@ -29,15 +29,10 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.31.2+k3s1" sh -s - \
 HA with embeded etc and kube-vip
 
 ```bash
-curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server \
+curl -sfL https://get.k3s.io | K3S_TOKEN=[SECRET] sh -s - server \
     --cluster-init \
-    --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
+    --tls-san=</[FIXED IP] # Optional, needed if using a fixed registration address
 ```
-
-### Custom Config with `yaml` file
-
-It's possible to configure cluster master deployment with arguments or environment variables on shell command 
-or use  `--config=/path/to/file/cluster-config.yaml` parameter when using shell command.
 
 ### Raw Cluster Deploy
 
@@ -58,15 +53,20 @@ curl -sfL https://get.k3s.io | sh -s - \
 
 ### Config File
 
+It's possible to configure cluster master deployment with arguments or environment variables on shell command 
+or use  `--config=/path/to/file/cluster-config.yaml` parameter.
+
 ```yaml
 # /etc/rancher/k3s/config.yaml
 flannel-backend: "none"
 disable-kube-proxy: true
 disable-network-policy: true
-cluster-init: true
 disable:
-  - servicelb
   - traefik
+  - servicelb
+  - coredns
+  - metrics-server
+cluster-init: true
 ```
 
 Create using the config file
@@ -86,8 +86,8 @@ K3S_TOKEN=$(k3s token create)
 ## Add Agent Nodes
 
 ```bash
-K3S_TOKEN=<TOKEN>
-API_SERVER_IP=<IP>
+K3S_TOKEN=[TOKEN]
+API_SERVER_IP=[IP]
 
 curl -sfL https://get.k3s.io | sh -s - agent \
   --token "${K3S_TOKEN}" \
@@ -97,8 +97,8 @@ curl -sfL https://get.k3s.io | sh -s - agent \
 ## Add Control Plane Nodes
 
 ```bash
-K3S_TOKEN=<TOKEN>
-API_SERVER_IP=<IP>
+K3S_TOKEN=[TOKEN]
+API_SERVER_IP=[IP]
 
 curl -sfL https://get.k3s.io | sh -s - server \
   --token ${K3S_TOKEN} \
@@ -113,10 +113,13 @@ curl -sfL https://get.k3s.io | sh -s - server \
 ## Remove Node
 
 ```bash
+# stop pod scheduling on the node
 kubectl cordon [NODE NAME]
 
+# remove pods from the node
 kubectl drain [NODE NAME] --ignore-daemonsets --delete-local-data
 
+# remove node
 kubectl delete node [NODE NAME]
 ```
 
@@ -136,7 +139,7 @@ sudo systemctl restart k3s-agent
 # uninstall master node
 sudo /usr/local/bin/k3s-uninstall.sh
 
-# uninstall master node
+# uninstall agent node
 sudo /usr/local/bin/k3s-agent-uninstall.sh
 
 # kill all
