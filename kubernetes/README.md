@@ -311,3 +311,18 @@ Be aware when mixin podAffinity and podAntiaffinity rules, if your cluster does 
 ```bash
 kubectl run busybox --rm -i -t --image=busybox:1.35 --restart=Never -- sh
 ```
+
+```bash
+# generic command
+kubectl run [NAME] --image=[IMAGE] --restart=Never --rm -it -- sh
+
+# busy box
+kubectl run busybox --image=busybox:1.36 --restart=Never --rm -it -- sh 
+``
+
+Parameters
+
+`--node [NODE IP]` - set the nodeip where the pod should run
+
+> [!TIP]
+> network troubleshoot - `nicolaka/netshoot`
