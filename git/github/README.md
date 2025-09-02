@@ -55,3 +55,37 @@ git config --global user.signingkey []
 git config --global commit.gpgsign true
 
 git config --global user.email "you@example.com"
+
+## Pre Commit Hooks
+
+> [!TIP]
+> If you are using config file for the hooks, make sure to specify the config-files on command args to always run the desired/select config
+
+### Commands
+
+```bash
+# install 
+pip install pre-commit-hooks
+
+# activate
+pre-commit install
+
+# update
+pre-commit update
+
+# clean
+pre-commit clean
+```
+
+### Config File
+
+pre-commit-config.yaml
+
+```yaml
+repos:
+  - repo: [REPOSITORY ADDRESS | str]
+    rev:  [REVISION | str]
+    hooks:
+      - id: [HOOK NAME | str]
+      	args: [COMMAND ARGS | list[str]]
+```
