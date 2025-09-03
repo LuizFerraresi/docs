@@ -184,13 +184,25 @@ one pod per node by default, this behavior can be changed by using label selecto
 
 ## Secrets
 
+### Opaque
+
+```bash
+# encode string to base64
+echo -n "[SECRET VALUE]" | base64 -w 0
+
+# decode string from base64
+echo -n "[SECRET VALUE" | base64 -d -w 0
+```
+
 [modify-secret](https://github.com/rajatjindal/kubectl-modify-secret)
 
 ```bash
 kubectl krew install modify-secret
 ```
 
-    kubectl modify-secret xyz -n kube-system
+```bash
+kubectl modify-secret [SECRET NAME} -n [NAMESPACE]
+```
 
 ```bash
 kubectl get secret [SECRET NAME] -n [NAMESPACE] -o json | jq -r '.data | to_entries[] | "\(.key): \(.value | @base64d)"'
