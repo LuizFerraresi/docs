@@ -184,13 +184,25 @@ one pod per node by default, this behavior can be changed by using label selecto
 
 ## Secrets
 
+### Opaque
+
+```bash
+# encode string to base64
+echo -n "[SECRET VALUE]" | base64 -w 0
+
+# decode string from base64
+echo -n "[SECRET VALUE" | base64 -d -w 0
+```
+
 [modify-secret](https://github.com/rajatjindal/kubectl-modify-secret)
 
 ```bash
 kubectl krew install modify-secret
 ```
 
-    kubectl modify-secret xyz -n kube-system
+```bash
+kubectl modify-secret [SECRET NAME} -n [NAMESPACE]
+```
 
 ```bash
 kubectl get secret [SECRET NAME] -n [NAMESPACE] -o json | jq -r '.data | to_entries[] | "\(.key): \(.value | @base64d)"'
@@ -311,3 +323,18 @@ Be aware when mixin podAffinity and podAntiaffinity rules, if your cluster does 
 ```bash
 kubectl run busybox --rm -i -t --image=busybox:1.35 --restart=Never -- sh
 ```
+
+```bash
+# generic command
+kubectl run [NAME] --image=[IMAGE] --restart=Never --rm -it -- sh
+
+# busy box
+kubectl run busybox --image=busybox:1.36 --restart=Never --rm -it -- sh 
+``
+
+Parameters
+
+`--node [NODE IP]` - set the nodeip where the pod should run
+
+> [!TIP]
+> network troubleshoot - `nicolaka/netshoot`
