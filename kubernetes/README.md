@@ -318,6 +318,12 @@ Be aware when mixin podAffinity and podAntiaffinity rules, if your cluster does 
 
 ## Troubleshooting
 
+### Usefull Commands
+
+```bash
+kubectl get pods -A -o json | jq -r '.items[] | select(.status.podIP | IN ("", "")) | .metadata.name'
+```
+
 ### Busy Box
 
 ```bash
