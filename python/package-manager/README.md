@@ -6,7 +6,7 @@
 [Documentation]()
 
 ```bash
-pip install --update
+python -m pip install --upgrade pip wheel setuptools
 
 pip install -r/--requirements path/to/requirements.txt
 
