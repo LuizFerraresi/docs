@@ -3,6 +3,10 @@
 
 This repo contains my personal documentation with some insights and usefull commands for daily usage
 
+## References
+
+- [AWS Well-Architected](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)
+
 ## Helpers
 
 - [Cron Expression](https://crontab.cronhub.io/)
@@ -16,13 +20,7 @@ This repo contains my personal documentation with some insights and usefull comm
 - [json](https://www.json.org/json-en.html)
 - [yaml](https://en.wikipedia.org/wiki/YAML)
 
-## References
-
-- [AWS Well-Architected](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)
-
-## SemVer - Semantic Versioning
-
-[Documentation](https://semver.org/)
+## [SemVer - Semantic Versioning](https://semver.org/)
 
 Release: `MAJOR.MINOR.PATH`
 
