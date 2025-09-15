@@ -1,7 +1,39 @@
 
 # PostgreSQL
 
+## Permission's
+
+### Role
+
+```sql
+-- Create role
+CREATE ROLE "[ROLE NAME]";
+
+-- Allow connection
+GRANT CONNECT ON DATABASE [DATABASE] TO [ROLE NAME];
+
+-- Assign your user to role
+GRANT "[ROLE NAME]" TO "[USERNAME]";
+```
+
 ## Query's
+
+### Read Only Permission
+
+```sql
+-- Grant usage on schema
+GRANT USAGE ON SCHEMA [SCHEMA] TO "[USERNAME]";
+
+-- Grant SELECT on all existing tables
+GRANT SELECT ON ALL TABLES IN SCHEMA [SCHEMA] TO "[USERNAME]";
+
+-- Make future tables automatically readable
+ALTER DEFAULT PRIVILEGES IN SCHEMA [SCHEMA] GRANT SELECT ON TABLES TO "[USERNAME]";
+
+-- Grant access to sequences
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA [SCHEMA] TO "[USERNAME]";
+ALTER DEFAULT PRIVILEGES IN SCHEMA [SCHEMA] GRANT USAGE, SELECT ON SEQUENCES TO "[USERNAME]";
+```
 
 ### Connections Count
 
