@@ -3,29 +3,33 @@
 
 ## Github CLI Login
 
-### Generate SSH Key Pair
+## SSH Authentication
+
+[Docs](https://en.wikipedia.org/wiki/Ssh-keygen)
+
+### Generate SSH Key
 
 ```bash
-GITHUB_EMAIL="your@email.com"
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_[KEY NAME]
 ```
 
 ```bash
-ssh-keygen -t ed25519 -C "$GITHUB_EMAIL" -f ~/.ssh/id_rsa_github
+ssh-keygen -t ed25519 -b 4096 -f ~/.ssh/id_ed25519_[KEY NAME]
 ```
 
-```bash
-eval "$(ssh-agent -s)"
-```
+Adding github.com to knows hosts
 
 ```bash
-ssh-add ~/.ssh/id_rsa_github
+ssh-keyscan github.com >> ~/.ssh/known_hosts
 ```
 
-```bash
-echo "\n  ###  GITHUB SSH PUBLIC KEY  ###"
-echo "  PASTE ON GITHUB DEPLOY KEY\n"
-cat ~/.ssh/id_rsa_github.pub
-```
+### SSH Permissions
+
+| Object        | Permision                       |
+|---------------|---------------------------------|
+| Private Key   | chmod 600 ~/.ssh/[KEY NAME]     |
+| Public Key    | chmod 644 ~/.ssh/[KEY NAME].pub |
+| `.ssh`        | chmod 700 ~/.ssh                |
 
 ### Authenticate
 
@@ -88,4 +92,45 @@ repos:
     hooks:
       - id: [HOOK NAME | str]
       	args: [COMMAND ARGS | list[str]]
+```
+
+## GitHub Actions
+
+Defined as `.yaml` file
+
+> [!IMPORTANT]
+> Must be in `.github/workflows/` folder to be recognized, its a gha limitation.
+
+### Actions Repository
+
+Calling some action in a remote repository with:
+
+```yaml
+# .github/workflows/main.yaml
+name: GHA Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options:
+          - prd
+        required: true
+        default: prd
+
+jobs:
+  build:
+    @[BRANCH NAME]
+    
+
+### Events
+
+```yaml
+on:
+  workflow_call
+  workflows_dispatch
+  pull
+  push
+  pull_request
 ```
