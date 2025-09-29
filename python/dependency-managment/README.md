@@ -1,5 +1,5 @@
 
-# Package Manager
+# Dependency Managment
 
 ## pip
 
