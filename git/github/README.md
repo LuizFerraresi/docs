@@ -1,8 +1,6 @@
 
 # GitHub
 
-## Github CLI Login
-
 ## SSH Authentication
 
 [Docs](https://en.wikipedia.org/wiki/Ssh-keygen)
@@ -74,6 +72,9 @@ pip install pre-commit-hooks
 # activate
 pre-commit install
 
+# self aware
+pre-commit autoupdate
+
 # update
 pre-commit update
 
@@ -128,9 +129,22 @@ jobs:
 
 ```yaml
 on:
-  workflow_call
-  workflows_dispatch
-  pull
-  push
-  pull_request
+  workflow_call:
+  workflows_dispatch:
+  pull:
+  push:
+  pull_request:
 ```
+
+### Badges
+
+```text
+![BADGE NAME](https://github.com/[OWNER]/[REPOSITORY]/actions/workflows/[WORKFLOW FILE]/badge.svg)](https://github.com/[OWNER]/[REPOSITORY]/actions/workflows/[WORKFLOW FILE])
+```
+
+The badge will automatically update with the status of your latest workflow run:
+- green for success,
+- red for failure
+- yellow for in progress
+
+Clicking the badge will take you to the workflow's run history
