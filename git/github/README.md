@@ -58,7 +58,7 @@ Key Expiration: 0 - Never
 COnfirm Key Expiration 0 - y
 Name
 Email
-COmment
+Comment
 
 passphase - you can skip cliking in ok with empty vallues
 compirm no pass phrase - validate the secutiry warning for not having a pass phrase
@@ -67,13 +67,14 @@ compirm no pass phrase - validate the secutiry warning for not having a pass phr
 gpg --list-secret-keys --keyid-format=long
 
 # show key
-gpg --armor --export
+gpg --armor --export [GPG KEY ID] > mykey.pub
+
 ´´´
 
 ### Configure Git
 ´´´bash
 # configure Git
-git config --global user.signingkey
+git config --global user.signingkey [GPG KEY ID]
 git config --global commit.gpgsign true
 git config --global user.email "[EMAIL]"
 ```
