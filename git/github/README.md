@@ -46,17 +46,37 @@ git config --global user.name "Your Name"
 
 ## Signing Key
 
-## GPG Key
+### Generate GPG Key
+
+```bash
+# start key generation
 gpg --full-generate-key
 
+Select key type: 1 - RSA and RSA
+Key size: 4096
+Key Expiration: 0 - Never
+COnfirm Key Expiration 0 - y
+Name
+Email
+COmment
+
+passphase - you can skip cliking in ok with empty vallues
+compirm no pass phrase - validate the secutiry warning for not having a pass phrase
+
+# list keys
 gpg --list-secret-keys --keyid-format=long
 
-gpg --armor --export []
+# show key
+gpg --armor --export
+´´´
 
-git config --global user.signingkey []
+### Configure Git
+´´´bash
+# configure Git
+git config --global user.signingkey
 git config --global commit.gpgsign true
-
-git config --global user.email "you@example.com"
+git config --global user.email "[EMAIL]"
+```
 
 ## Pre Commit Hooks
 
