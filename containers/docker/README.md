@@ -107,6 +107,19 @@ docker context ls
 docker context use [CONTEXT NAME]
 ```
 
+## Docker Engine Config
+
+`/etc/docker/daemon.json`
+
+### Expose Metrics
+
+```json
+{
+  "metrics-addr": "127.0.0.1:9323",
+  "experimental": true
+}
+```
+
 ## Image Registry
 
 A Registry is a collection of images wich can be downloaded.
