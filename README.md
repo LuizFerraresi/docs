@@ -9,6 +9,7 @@ This repo contains my personal documentation with some insights and usefull comm
 
 ## Helpers
 
+- [Down Detector](https://downdetector.com.br/)
 - [Cron Expression](https://crontab.cronhub.io/)
 - [Base 64 Encode/Decode](https://www.base64decode.org/)
 - [Json Formatter](https://jsonformatter.curiousconcept.com/#)
