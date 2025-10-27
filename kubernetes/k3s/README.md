@@ -40,7 +40,7 @@ curl -sfL https://get.k3s.io | K3S_TOKEN=[SECRET] sh -s - server \
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - \
-  --node-name [NODE NAME]
+  --node-name [NODE NAME] \
   --flannel-backend none \    # disable fannel backend
   --disable-kube-proxy \      # disable bukeproxy daemont set
   --disable-network-policy \  # disable kube-routers network policy
