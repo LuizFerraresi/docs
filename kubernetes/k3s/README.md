@@ -149,9 +149,9 @@ sudo /usr/local/bin/k3s-killall.sh
 sudo rm -rf /etc/rancher/k3s /var/lib/rancher/k3s
 
 # cleanup previous installations
-rm -rf /var/lib/rancher /etc/rancher; \
-ip addr flush dev lo; \
-ip addr add 127.0.0.1/8 dev lo;
+sudo rm -rf /var/lib/rancher /etc/rancher; \
+sudo ip addr flush dev lo; \
+sudo ip addr add 127.0.0.1/8 dev lo;
 ```
 
 ## Cluster Credentials
