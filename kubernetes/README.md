@@ -3,6 +3,10 @@
 
 [Config Best Practices](https://kubernetes.io/docs/concepts/configuration/overview/)
 
+## Tools
+
+[kubecolor](https://github.com/kubecolor/kubecolor)
+
 ## Kubectl
 
 > [!WARNING]
