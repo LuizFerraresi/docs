@@ -3,16 +3,14 @@
 
 [Website](https://docs.k3s.io/) | [Github](https://github.com/k3s-io/k3s)
 
-default api port: `6443`
-
-default coredns ip: 10.43.0.10
+API Port: `6443`
 
 ## Installation
 
 ### Simple Installation
 
 ```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.31.2+k3s1" sh -s - \
+curl -sfL https://get.k3s.io | sh -s - \
   --docker
 ```
 
@@ -23,7 +21,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.31.2+k3s1" sh -s - \
 `--cluster-init` - start in cluster mode
 
 > [!WARNING]
-> node name must be unique across the cluster, if your instances has the same name,use `--node-name` to provide
+> Node name must be unique across the cluster, if your instances has the same name,use `--node-name` to provide
 > an unique identification for each node
 
 HA with embeded etc and kube-vip
@@ -31,7 +29,7 @@ HA with embeded etc and kube-vip
 ```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=[SECRET] sh -s - server \
     --cluster-init \
-    --tls-san=</[FIXED IP] # Optional, needed if using a fixed registration address
+    --tls-san=[FIXED IP] # Optional, needed if using a fixed registration address
 ```
 
 ### Raw Cluster Deploy
@@ -54,7 +52,9 @@ curl -sfL https://get.k3s.io | sh -s - \
 ### Config File
 
 It's possible to configure cluster master deployment with arguments or environment variables on shell command 
-or use  `--config=/path/to/file/cluster-config.yaml` parameter.
+or use  `--config=/path/to/file/config.yaml` parameter.
+
+The installation will automatically search for configuration at `/etc/rancher/k3s/config.yaml`.
 
 ```yaml
 # /etc/rancher/k3s/config.yaml
@@ -185,14 +185,6 @@ chmod 600 "$KUBECONFIG"
 ## Troubleshooting
 
 ```bash
-# service status
-sudo systemctl status k3s.service
-
-# restar service
-sudo systemctl restart k3s
-```
-
-```bash
 # service logs
 sudo journalctl -u k3s -n 30 --no-pager
 ```
@@ -215,15 +207,17 @@ Whithout cluster CNI (Container Network Interface):
 ```bash
 curl -sfL https://get.k3s.io | sh -s - \
   --node-name [NODE NAME]
-  --flannel-backend none \
-  --disable-kube-proxy \
-  --disable-network-policy \
-  --disable traefik \
-  --disable servicelb \
-  --disable coredns \
-  --cluster-init
 ```
 
-```bash
-
+```yaml
+# /etc/rancher/k3s/config.yaml
+write-kubeconfig-mode: 644
+flannel-backend: "none"
+disable-kube-proxy: true
+disable-network-policy: true
+disable:
+  - servicelb
+  - traefik
+  - metrics-server
+  - coredns
 ```
