@@ -12,6 +12,12 @@
 
 [Docker Swarm](./docs/docker-swarm.md)
 
+## Tools
+
+[lazy docker](https://lazydocker.com/#feature)
+
+[ctop](https://ctop.sh/)
+
 ## Virtualization
 
 ![Virtualization Image](src=)
@@ -105,6 +111,19 @@ docker context ls
 
 # select context
 docker context use [CONTEXT NAME]
+```
+
+## Docker Engine Config
+
+`/etc/docker/daemon.json`
+
+### Expose Metrics
+
+```json
+{
+  "metrics-addr": "127.0.0.1:9323",
+  "experimental": true
+}
 ```
 
 ## Image Registry

@@ -3,8 +3,10 @@
 
 ## Disable IPv6
 
+### systemctl
+
 To disable IPV6 just run the following commands, this will not persist after rebooting
-your machine
+your machine.
 
 ```bash
 sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
@@ -14,7 +16,7 @@ sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
 
 One method to make this option persist is modifying `/etc/sysctl.conf`, lets create a
 custom file that persist the ipv6 settings event after distro update, you should be
-logged in as **sudo**
+logged in as **sudo**.
 
 ```bash
 cat >> /etc/sysctl.conf/60-custom.conf < EOF
@@ -23,6 +25,7 @@ net.ipv6.conf.all.disable_ipv6=1
 net.ipv6.conf.default.disable_ipv6=1
 net.ipv6.conf.lo.disable_ipv6=1
 net.ipv6.conf.<WIFI>.disable_ipv6=1
+
 EOF
 ```
 
@@ -33,7 +36,7 @@ sudo sysctl -p
 sudo systemctl restart procps
 ```
 
-### Disable IPv6 with GRUB
+### Grub
 
 Access GRUB file
 

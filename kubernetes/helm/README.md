@@ -53,6 +53,10 @@ helm install <HELM NAME> <REPO NAME>/<HELM NAME> \
     --values values.yaml  # With custom values
 ```
 
+### Extensions
+
+helm diff
+
 ### Install Definition Files
 
 full definition installation -> add crd and resources definitions to local folder sistem,
